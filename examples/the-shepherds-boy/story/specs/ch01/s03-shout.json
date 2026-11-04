@@ -1,0 +1,197 @@
+{
+ "id": "s03-shout",
+ "set": "village",
+ "background": "#6b6256",
+ "layers": [
+  {
+   "name": "sky",
+   "src": "../../assets/art/ch01/hill/sky_day.png",
+   "z": 0.0
+  },
+  {
+   "name": "peaks_far",
+   "src": "../../assets/art/ch01/hill/peaks_far.png",
+   "z": 0.05
+  },
+  {
+   "name": "hills",
+   "src": "hills.png",
+   "z": 0.12
+  },
+  {
+   "name": "smoke",
+   "src": "smoke.png",
+   "z": 0.2,
+   "origin": [
+    1056,
+    500
+   ],
+   "move": [
+    {
+     "t": 0,
+     "x": -8,
+     "s": 1.0
+    },
+    {
+     "t": "end",
+     "x": 14,
+     "s": 1.02,
+     "ease": "none"
+    }
+   ]
+  },
+  {
+   "name": "houses",
+   "src": "houses.png",
+   "z": 0.3
+  },
+  {
+   "name": "street",
+   "src": "street.png",
+   "z": 0.45
+  },
+  {
+   "name": "crowd_run",
+   "frames": {
+    "srcs": [
+     "crowd_run1.png",
+     "crowd_run2.png"
+    ],
+    "fps": 7
+   },
+   "z": 0.65,
+   "move": [
+    {
+     "t": 0,
+     "x": 1700,
+     "o": 1
+    },
+    {
+     "t": "cue:running",
+     "x": 1700,
+     "o": 1
+    },
+    {
+     "t": "cue:laughed",
+     "x": 0,
+     "o": 1,
+     "ease": "power1.out"
+    },
+    {
+     "t": "cue:laughed+0.04",
+     "x": 0,
+     "o": 0
+    }
+   ]
+  },
+  {
+   "name": "crowd_stand",
+   "src": "crowd_stand.png",
+   "z": 0.65,
+   "move": [
+    {
+     "t": 0,
+     "o": 0
+    },
+    {
+     "t": "cue:laughed",
+     "o": 0
+    },
+    {
+     "t": "cue:laughed+0.04",
+     "o": 1
+    }
+   ]
+  },
+  {
+   "name": "boy",
+   "frames": {
+    "srcs": [
+     "boy_stand.png",
+     "boy_cry.png"
+    ],
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      "cue:shouted",
+      1
+     ]
+    ]
+   },
+   "z": 0.7,
+   "move": [
+    {
+     "t": 0,
+     "o": 1
+    },
+    {
+     "t": "cue:laughed",
+     "o": 1
+    },
+    {
+     "t": "cue:laughed+0.04",
+     "o": 0
+    }
+   ]
+  },
+  {
+   "name": "boy_laugh",
+   "src": "boy_laugh.png",
+   "z": 0.7,
+   "bob": {
+    "amp": 3.2,
+    "period": 0.3
+   },
+   "move": [
+    {
+     "t": 0,
+     "o": 0
+    },
+    {
+     "t": "cue:laughed",
+     "o": 0
+    },
+    {
+     "t": "cue:laughed+0.04",
+     "o": 1
+    }
+   ]
+  },
+  {
+   "name": "fg",
+   "src": "fg.png",
+   "z": 1.0
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "x": -60,
+   "y": 6,
+   "zoom": 1.05
+  },
+  {
+   "t": "end",
+   "x": 30,
+   "y": 0,
+   "zoom": 1.0,
+   "ease": "sine.inOut"
+  }
+ ],
+ "fx": [
+  {
+   "type": "glow",
+   "x": 430,
+   "y": 196,
+   "r": 460,
+   "color": "#fff1c4",
+   "opacity": 0.24,
+   "z": 0.0,
+   "flicker": 0.02
+  }
+ ],
+ "text": []
+}

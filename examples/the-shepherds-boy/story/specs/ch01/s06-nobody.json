@@ -1,0 +1,193 @@
+{
+ "id": "s06-nobody",
+ "set": "village",
+ "background": "#1d1a18",
+ "layers": [
+  {
+   "name": "sky",
+   "src": "../../assets/art/ch01/hill/sky_night.png",
+   "z": 0.0
+  },
+  {
+   "name": "peaks_far",
+   "src": "../../assets/art/ch01/hill/peaks_far.png",
+   "z": 0.05
+  },
+  {
+   "name": "hills",
+   "src": "hills.png",
+   "z": 0.12
+  },
+  {
+   "name": "smoke",
+   "src": "smoke.png",
+   "z": 0.2,
+   "origin": [
+    1056,
+    500
+   ],
+   "move": [
+    {
+     "t": 0,
+     "x": -8,
+     "s": 1.0
+    },
+    {
+     "t": "end",
+     "x": 14,
+     "s": 1.02,
+     "ease": "none"
+    }
+   ]
+  },
+  {
+   "name": "houses",
+   "src": "houses.png",
+   "z": 0.3
+  },
+  {
+   "name": "street",
+   "src": "street.png",
+   "z": 0.45
+  },
+  {
+   "name": "boy",
+   "src": "boy_cry.png",
+   "z": 0.7
+  },
+  {
+   "name": "fg",
+   "src": "fg.png",
+   "z": 1.0
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "x": -70,
+   "y": 8,
+   "zoom": 1.14
+  },
+  {
+   "t": "end",
+   "x": 0,
+   "y": 0,
+   "zoom": 1.0,
+   "ease": "sine.inOut"
+  }
+ ],
+ "fx": [
+  {
+   "type": "tint",
+   "color": "#6e6a78",
+   "blend": "multiply",
+   "keys": [
+    {
+     "t": 0,
+     "o": 0.85
+    }
+   ]
+  },
+  {
+   "type": "glow",
+   "x": -54,
+   "y": 618,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 186,
+   "y": 618,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 389,
+   "y": 639,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 587,
+   "y": 639,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 778,
+   "y": 607,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 1030,
+   "y": 607,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 1251,
+   "y": 635,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 1455,
+   "y": 635,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 1649,
+   "y": 614,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  },
+  {
+   "type": "glow",
+   "x": 1913,
+   "y": 614,
+   "r": 130,
+   "color": "#ffb765",
+   "opacity": 0.42,
+   "z": 0.3,
+   "flicker": 0.05
+  }
+ ],
+ "text": []
+}

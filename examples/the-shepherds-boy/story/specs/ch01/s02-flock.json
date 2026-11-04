@@ -1,0 +1,153 @@
+{
+ "id": "s02-flock",
+ "set": "hill",
+ "background": "#6b6256",
+ "layers": [
+  {
+   "name": "sky",
+   "src": "sky_day.png",
+   "z": 0.0
+  },
+  {
+   "name": "peaks_far",
+   "src": "peaks_far.png",
+   "z": 0.05
+  },
+  {
+   "name": "peaks_near",
+   "src": "peaks_near.png",
+   "z": 0.1
+  },
+  {
+   "name": "valley",
+   "src": "valley.png",
+   "z": 0.18
+  },
+  {
+   "name": "forest",
+   "src": "forest.png",
+   "z": 0.28
+  },
+  {
+   "name": "meadow",
+   "src": "meadow.png",
+   "z": 0.5
+  },
+  {
+   "name": "sheep_far",
+   "src": "sheep_far.png",
+   "z": 0.55,
+   "bob": {
+    "amp": 0.9,
+    "period": 3.1
+   }
+  },
+  {
+   "name": "boy",
+   "src": "boy_stand.png",
+   "z": 0.62
+  },
+  {
+   "name": "sheep_a",
+   "src": "sheep_a.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 0.0,
+    "origin": [
+     236,
+     1022
+    ]
+   }
+  },
+  {
+   "name": "sheep_b",
+   "src": "sheep_b.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 1.1,
+    "origin": [
+     786,
+     1044
+    ]
+   }
+  },
+  {
+   "name": "sheep_c",
+   "src": "sheep_c.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 2.3,
+    "origin": [
+     1306,
+     1026
+    ]
+   }
+  },
+  {
+   "name": "sheep_d",
+   "src": "sheep_d.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 3.4,
+    "origin": [
+     1706,
+     1050
+    ]
+   }
+  },
+  {
+   "name": "fg",
+   "src": "fg.png",
+   "z": 1.0
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "x": -40,
+   "y": 8,
+   "zoom": 1.0
+  },
+  {
+   "t": "end",
+   "x": 24,
+   "y": 0,
+   "zoom": 1.08,
+   "ease": "sine.inOut"
+  }
+ ],
+ "fx": [
+  {
+   "type": "glow",
+   "x": 430,
+   "y": 196,
+   "r": 460,
+   "color": "#fff1c4",
+   "opacity": 0.28,
+   "z": 0.0,
+   "flicker": 0.02
+  },
+  {
+   "type": "dust",
+   "box": [
+    100,
+    320,
+    1700,
+    520
+   ],
+   "n": 46,
+   "z": 0.65,
+   "color": "#fff6dc",
+   "opacity": 0.4
+  }
+ ],
+ "text": []
+}

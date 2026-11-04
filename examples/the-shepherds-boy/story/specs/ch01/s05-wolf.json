@@ -1,0 +1,178 @@
+{
+ "id": "s05-wolf",
+ "set": "hill",
+ "background": "#2f2a25",
+ "layers": [
+  {
+   "name": "sky",
+   "src": "sky_dusk.png",
+   "z": 0.0
+  },
+  {
+   "name": "peaks_far",
+   "src": "peaks_far.png",
+   "z": 0.05
+  },
+  {
+   "name": "peaks_near",
+   "src": "peaks_near.png",
+   "z": 0.1
+  },
+  {
+   "name": "valley",
+   "src": "valley.png",
+   "z": 0.18
+  },
+  {
+   "name": "forest",
+   "src": "forest.png",
+   "z": 0.28
+  },
+  {
+   "name": "meadow",
+   "src": "meadow.png",
+   "z": 0.5
+  },
+  {
+   "name": "sheep_far",
+   "src": "sheep_far.png",
+   "z": 0.55,
+   "bob": {
+    "amp": 0.9,
+    "period": 1.7
+   }
+  },
+  {
+   "name": "boy",
+   "frames": {
+    "srcs": [
+     "boy_stand.png",
+     "boy_cry.png"
+    ],
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      "cue:cried",
+      1
+     ]
+    ]
+   },
+   "z": 0.62
+  },
+  {
+   "name": "sheep_a",
+   "src": "sheep_a.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 0.0,
+    "origin": [
+     236,
+     1022
+    ]
+   }
+  },
+  {
+   "name": "sheep_b",
+   "src": "sheep_b.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 1.1,
+    "origin": [
+     786,
+     1044
+    ]
+   }
+  },
+  {
+   "name": "wolf",
+   "frames": {
+    "srcs": [
+     "wolf_1.png",
+     "wolf_2.png"
+    ],
+    "fps": 5
+   },
+   "z": 0.72,
+   "move": [
+    {
+     "t": 0,
+     "x": 820
+    },
+    {
+     "t": "cue:wolf",
+     "x": 820
+    },
+    {
+     "t": "cue:loud",
+     "x": 40,
+     "ease": "power1.out"
+    }
+   ]
+  },
+  {
+   "name": "sheep_c",
+   "src": "sheep_c.png",
+   "z": 0.8,
+   "sway": {
+    "amp": 1.3,
+    "period": 2.7,
+    "phase": 2.3,
+    "origin": [
+     1306,
+     1026
+    ]
+   }
+  },
+  {
+   "name": "fg",
+   "src": "fg.png",
+   "z": 1.0
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "x": 10,
+   "y": 4,
+   "zoom": 1.0
+  },
+  {
+   "t": "end",
+   "x": 60,
+   "y": 0,
+   "zoom": 1.1,
+   "ease": "sine.inOut"
+  }
+ ],
+ "fx": [
+  {
+   "type": "tint",
+   "color": "#a8977f",
+   "blend": "multiply",
+   "keys": [
+    {
+     "t": 0,
+     "o": 0.62
+    }
+   ]
+  },
+  {
+   "type": "glow",
+   "x": 1420,
+   "y": 250,
+   "r": 320,
+   "color": "#fff0c2",
+   "opacity": 0.3,
+   "z": 0.0,
+   "flicker": 0.02
+  }
+ ],
+ "text": []
+}

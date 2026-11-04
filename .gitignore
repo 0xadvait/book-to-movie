@@ -1,0 +1,23 @@
+# your keys
+.env
+.env.*
+!.env.example
+
+# your books and films
+projects/
+
+# the local environment
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+node_modules/
+
+# machine noise
+.claude/settings.local.json
+.DS_Store
+.hyperframes/
+*.log

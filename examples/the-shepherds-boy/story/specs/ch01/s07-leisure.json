@@ -1,0 +1,203 @@
+{
+ "id": "s07-leisure",
+ "set": "hill",
+ "background": "#1d1a18",
+ "layers": [
+  {
+   "name": "sky",
+   "src": "sky_night.png",
+   "z": 0.0
+  },
+  {
+   "name": "peaks_far",
+   "src": "peaks_far.png",
+   "z": 0.05
+  },
+  {
+   "name": "peaks_near",
+   "src": "peaks_near.png",
+   "z": 0.1
+  },
+  {
+   "name": "valley",
+   "src": "valley.png",
+   "z": 0.18
+  },
+  {
+   "name": "forest",
+   "src": "forest.png",
+   "z": 0.28
+  },
+  {
+   "name": "meadow",
+   "src": "meadow.png",
+   "z": 0.5
+  },
+  {
+   "name": "sheep_far",
+   "src": "sheep_far.png",
+   "z": 0.55,
+   "move": [
+    {
+     "t": 0,
+     "o": 1
+    },
+    {
+     "t": "cue:way",
+     "o": 1
+    },
+    {
+     "t": "cue:way+0.9",
+     "o": 0,
+     "ease": "power1.in"
+    }
+   ]
+  },
+  {
+   "name": "sheep_d",
+   "src": "sheep_d.png",
+   "z": 0.8,
+   "move": [
+    {
+     "t": 0,
+     "o": 1
+    },
+    {
+     "t": "cue:killed",
+     "o": 1
+    },
+    {
+     "t": "cue:killed+0.6",
+     "o": 0,
+     "ease": "power1.in"
+    }
+   ]
+  },
+  {
+   "name": "sheep_c",
+   "src": "sheep_c.png",
+   "z": 0.8,
+   "move": [
+    {
+     "t": 0,
+     "o": 1
+    },
+    {
+     "t": "cue:sheep",
+     "o": 1
+    },
+    {
+     "t": "cue:sheep+0.6",
+     "o": 0,
+     "ease": "power1.in"
+    }
+   ]
+  },
+  {
+   "name": "sheep_b",
+   "src": "sheep_b.png",
+   "z": 0.8,
+   "move": [
+    {
+     "t": 0,
+     "o": 1
+    },
+    {
+     "t": "cue:sheep#2",
+     "o": 1
+    },
+    {
+     "t": "cue:sheep#2+0.6",
+     "o": 0,
+     "ease": "power1.in"
+    }
+   ]
+  },
+  {
+   "name": "wolf",
+   "frames": {
+    "srcs": [
+     "wolf_1.png",
+     "wolf_2.png"
+    ],
+    "fps": 3.5
+   },
+   "z": 0.72,
+   "move": [
+    {
+     "t": 0,
+     "x": 560
+    },
+    {
+     "t": "end",
+     "x": -900,
+     "ease": "none"
+    }
+   ]
+  },
+  {
+   "name": "sheep_a",
+   "src": "sheep_a.png",
+   "z": 0.8,
+   "move": [
+    {
+     "t": 0,
+     "o": 1
+    },
+    {
+     "t": "cue:leisure",
+     "o": 1
+    },
+    {
+     "t": "cue:leisure+0.6",
+     "o": 0,
+     "ease": "power1.in"
+    }
+   ]
+  },
+  {
+   "name": "fg",
+   "src": "fg.png",
+   "z": 1.0
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "x": 40,
+   "y": 0,
+   "zoom": 1.08
+  },
+  {
+   "t": "end",
+   "x": -40,
+   "y": 6,
+   "zoom": 1.0,
+   "ease": "sine.inOut"
+  }
+ ],
+ "fx": [
+  {
+   "type": "tint",
+   "color": "#6e6a78",
+   "blend": "multiply",
+   "keys": [
+    {
+     "t": 0,
+     "o": 0.8
+    }
+   ]
+  },
+  {
+   "type": "glow",
+   "x": 1420,
+   "y": 170,
+   "r": 320,
+   "color": "#fff0c2",
+   "opacity": 0.32,
+   "z": 0.0,
+   "flicker": 0.02
+  }
+ ],
+ "text": []
+}

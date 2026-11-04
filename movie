@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# The command line. Run ./setup.sh once first.
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ ! -x "$DIR/.venv/bin/python" ]; then
+  echo "Run ./setup.sh first." >&2
+  exit 1
+fi
+PYTHONDONTWRITEBYTECODE=1 exec "$DIR/.venv/bin/python" -m book_to_movie "$@"

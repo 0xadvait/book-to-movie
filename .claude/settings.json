@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./movie:*)",
+      "Bash(./setup.sh)",
+      "Bash(.venv/bin/pytest:*)",
+      "Edit(/projects/**)"
+    ],
+    "ask": [
+      "Bash(./movie music:*)"
+    ]
+  }
+}

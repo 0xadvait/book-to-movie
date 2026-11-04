@@ -1,0 +1,133 @@
+{
+ "id": "s04-again",
+ "set": "village",
+ "background": "#4e463d",
+ "layers": [
+  {
+   "name": "sky",
+   "src": "../../assets/art/ch01/hill/sky_dusk.png",
+   "z": 0.0
+  },
+  {
+   "name": "peaks_far",
+   "src": "../../assets/art/ch01/hill/peaks_far.png",
+   "z": 0.05
+  },
+  {
+   "name": "hills",
+   "src": "hills.png",
+   "z": 0.12
+  },
+  {
+   "name": "smoke",
+   "src": "smoke.png",
+   "z": 0.2,
+   "origin": [
+    1056,
+    500
+   ],
+   "move": [
+    {
+     "t": 0,
+     "x": -8,
+     "s": 1.0
+    },
+    {
+     "t": "end",
+     "x": 14,
+     "s": 1.02,
+     "ease": "none"
+    }
+   ]
+  },
+  {
+   "name": "houses",
+   "src": "houses.png",
+   "z": 0.3
+  },
+  {
+   "name": "street",
+   "src": "street.png",
+   "z": 0.45
+  },
+  {
+   "name": "crowd_leave",
+   "frames": {
+    "srcs": [
+     "crowd_leave1.png",
+     "crowd_leave2.png"
+    ],
+    "fps": 3.5
+   },
+   "z": 0.65,
+   "move": [
+    {
+     "t": 0,
+     "x": -40
+    },
+    {
+     "t": "end",
+     "x": 1000,
+     "ease": "none"
+    }
+   ]
+  },
+  {
+   "name": "boy_laugh",
+   "src": "boy_laugh.png",
+   "z": 0.7,
+   "bob": {
+    "amp": 3.0,
+    "period": 0.3
+   }
+  },
+  {
+   "name": "fg",
+   "src": "fg.png",
+   "z": 1.0
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "x": 20,
+   "y": 0,
+   "zoom": 1.0
+  },
+  {
+   "t": "end",
+   "x": -30,
+   "y": 4,
+   "zoom": 1.05,
+   "ease": "sine.inOut"
+  }
+ ],
+ "fx": [
+  {
+   "type": "tint",
+   "color": "#bba98f",
+   "blend": "multiply",
+   "keys": [
+    {
+     "t": 0,
+     "o": 0.35
+    },
+    {
+     "t": "end",
+     "o": 0.7
+    }
+   ]
+  }
+ ],
+ "text": [
+  {
+   "type": "stamp",
+   "text": "HOAXED",
+   "at": "cue:hoaxed",
+   "x": 1090,
+   "y": 200,
+   "rot": -7,
+   "size": 118
+  }
+ ]
+}
