@@ -8,6 +8,9 @@ import difflib
 import importlib.util
 import json
 import os
+import subprocess
+
+import numpy as np
 
 from .project import norm, probe_duration
 
@@ -28,6 +31,14 @@ def backend():
     return None
 
 
+def decode_16k(path):
+    """mono 16 kHz samples through ffmpeg, which is already required. faster-whisper's own decoder depends on PyAV's API."""
+    r = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "f32le", "-ac", "1", "-ar", "16000", "-"], capture_output=True)
+    if r.returncode:
+        raise SystemExit(f"cannot read {path}: {r.stderr.decode(errors='replace')[:200]}")
+    return np.frombuffer(r.stdout, np.float32)
+
+
 def transcribe(path, model="large-v3-turbo", language="en"):
     """-> [{"word", "start", "end"}]. No initial_prompt on purpose: it makes whisper skip text."""
     be = backend()
@@ -40,7 +51,7 @@ def transcribe(path, model="large-v3-turbo", language="en"):
         from faster_whisper import WhisperModel
         if model not in _faster:
             _faster[model] = WhisperModel(model, device="auto", compute_type="auto")
-        segments, _ = _faster[model].transcribe(str(path), word_timestamps=True, language=language,
+        segments, _ = _faster[model].transcribe(decode_16k(path), word_timestamps=True, language=language,
                                                 condition_on_previous_text=False)
         return [{"word": w.word, "start": w.start, "end": w.end} for s in segments for w in (s.words or [])]
     raise RuntimeError("no whisper backend installed")

@@ -168,3 +168,35 @@ def test_music_plan_turns_with_the_scenes(voiced):
     assert plan["sections"][0]["duration_ms"] == max(3000, int(tm["s01-chapter"]["duration"] * 1000))
     assert plan["sections"][1]["duration_ms"] == int(tm["s02-harbour"]["duration"] * 1000) + 2000
     assert "vocals" in plan["negative_global_styles"]
+
+
+@needs_ffmpeg
+def test_faster_whisper_gets_samples_not_a_path(tmp_path, monkeypatch):
+    """its own decoder broke on a new PyAV release and would crash every Linux user's first run, so we decode with ffmpeg"""
+    import subprocess
+    import sys
+    import types
+
+    import numpy as np
+
+    from book_to_movie import align
+
+    wav = tmp_path / "line.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "sine=frequency=440:duration=1", str(wav)], check=True)
+    seen = {}
+
+    class FakeModel:
+        def __init__(self, *a, **k):
+            pass
+
+        def transcribe(self, audio, **k):
+            seen["audio"] = audio
+            word = types.SimpleNamespace(word=" hello", start=0.1, end=0.5)
+            return [types.SimpleNamespace(words=[word])], None
+
+    monkeypatch.setitem(sys.modules, "faster_whisper", types.SimpleNamespace(WhisperModel=FakeModel))
+    monkeypatch.setenv("MOVIE_WHISPER", "faster")
+    monkeypatch.setattr(align, "_faster", {})
+    assert align.transcribe(wav, "tiny", "en") == [{"word": " hello", "start": 0.1, "end": 0.5}]
+    assert isinstance(seen["audio"], np.ndarray) and seen["audio"].dtype == np.float32
+    assert len(seen["audio"]) == pytest.approx(16000, abs=400)
