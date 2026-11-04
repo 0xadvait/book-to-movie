@@ -49,7 +49,8 @@ def next_step(s, ch):
 def show_status(p):
     print(f"{p.cfg['title']}  [{p.slug}]  {p.root}")
     print(f"voice {pick_provider(p.cfg['voice']['provider'])}, look {p.cfg['look'] if isinstance(p.cfg['look'], str) else 'custom'}, "
-          f"music {'on' if p.cfg['music'] else 'off'}, sound effects {'on' if p.cfg['sfx'] else 'off'}")
+          f"music {'on' if p.cfg['music'] else 'off'}, sound effects "
+          f"{('on' if fal_key() or elevenlabs_key() else 'on, but skipped until there is a key') if p.cfg['sfx'] else 'off'}")
     index = p.root / "source" / "chapters.json"
     if index.exists():
         parts = json.loads(index.read_text())

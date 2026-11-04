@@ -25,7 +25,8 @@ scene, never on a definition.
 ## Length
 
 The narrator runs about 175 words a minute. The treatment gives each part a target. Scenes average 35 to 65 words (10 to
-22 seconds), 12 to 22 scenes per part. A story-heavy part is usually 1,250 to 1,450 words, a compact one 650 to 950.
+22 seconds), 12 to 22 scenes per part. A story-heavy part is usually 1,250 to 1,450 words, a compact one 650 to 950. For a short
+work, scale all of this down: the worked example is 8 scenes, 2 sets and 6 effects for one minute.
 
 ## Narration rules
 
@@ -52,6 +53,7 @@ S = [  # (scene id, art, narration)
     ("s19-close", "card:close", "... In the next chapter, the island."),
 ]
 LEAD = {...}; HOLD = {...}          # optional per-scene seconds before and after the line (cards: about 1.0 lead, 1.3 hold)
+                                    # scenes dissolve for 0.8 s: if a scene's first word names an action, give it a LEAD of about 1.0
 TRANS = {"s08-island": ("fadeblack", 1.0)}   # a dip through black where a new story starts; the default is a dissolve
 CARDS = {...}                       # see below
 SETS = {...}                        # see below

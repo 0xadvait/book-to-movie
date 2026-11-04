@@ -14,7 +14,9 @@ Work in this order and do not skip the two approval gates: a rendered film is ex
 ## 1. Start the project
 
 1. If `.venv` is missing, run `./setup.sh`. Then `./movie doctor`. Fix anything marked MISSING. Tell the person which voice
-   they will get: `fal` or `elevenlabs` if a key is in `.env`, otherwise the computer's free voice. Free is fine for a pilot.
+   they will get: `fal` or `elevenlabs` if a key is in `.env` or the shell, otherwise the computer's free voice. Free is fine for
+   a pilot. To force it even with a key present, set `"voice": {"provider": "say"}` in `movie.json` (`espeak` on Linux, or
+   `silent` for an animatic with real timing and no sound).
 2. `./movie new <book> --title "..." --author "..."` makes `projects/<slug>/` and prints the chapters it found. Check the
    table. If the split is wrong (a contents page counted, chapters merged), re-run with `--force --heading 'REGEX'`. A scan
    with no text layer needs OCR first.
@@ -40,6 +42,7 @@ Set these in `movie.json`:
 - `look`: `sepia` (default), `noir`, `indigo`, `forest`, `oxblood`, or `{"paper": "#...", "ink": "#...", "accent": "#..."}`.
 - `voice`: `name` is any ElevenLabs voice (default `Bill`, an older storyteller), `respell` fixes specific words the voice
   gets wrong, only after hearing them wrong. Let names alone until then: forced respellings often sound worse.
+- `whisper`: the speech model for word timing. `large-v3-turbo` (default) is the most accurate, `small` is a smaller download.
 - `language` if not English. Only English has been tested end to end; the fonts shipped cover Latin script, and whisper's
   word timing assumes words separated by spaces.
 
@@ -96,7 +99,7 @@ if the person asks for it.
 | `voice` refuses a script | `./movie check NN` lists the errors: usually digits or a dash in narration |
 | A cue error: "the narration says that word 0 time(s)" | Use a word that is really in that scene's narration |
 | A layer pops or a frame edge shows | Camera moved past the overhang: see the camera limits in the illustrator brief |
-| A render fails | The log path is in the error. Usually a bad image path in the spec |
+| A render fails | The error names the spec and the cause (a bad image path, a cue that is not spoken), or the log to read |
 | The voice stumbles over a word | Add it to `voice.respell` in `movie.json`, then `./movie voice NN`: only that scene is re-voiced |
 | A scene is a blank paper bar in the cut | It has no spec yet: the cut works anyway, with placeholders |
 | Running out of disk | Delete `build/`, then renders of finished parts in `film/renders/chNN/` once the masters exist |

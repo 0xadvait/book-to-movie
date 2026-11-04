@@ -8,7 +8,7 @@ import sys
 import time
 from pathlib import Path
 
-from .project import PROJECTS, REPO, Project, chapter_tag, find_project, load_env, set_current, slugify
+from .project import PROJECTS, REPO, Project, chapter_tag, cue_seconds, find_project, load_env, set_current, slugify
 
 
 def _chapters(p, value):
@@ -192,8 +192,12 @@ def cmd_scene(a):
     p = find_project(a.project)
     ch = chapter_tag(a.chapter)
     render_scenes(p, ch, a.scenes, jobs=a.jobs or 1, workers=a.workers or 2, force=a.force)
+    tm = p.timing(ch)
     for sid in a.scenes:
-        for f in scene_frames(p, ch, sid):
+        times = None
+        if a.at:
+            times = [cue_seconds(x, p.words(ch, sid), tm[sid]["vo_offset"]) if x.startswith("cue:") else float(x) for x in a.at]
+        for f in scene_frames(p, ch, sid, times):
             print(f)
 
 
@@ -379,7 +383,8 @@ def build_parser():
     add("art", cmd_art, "run drawing scripts and engrave their layers", part, (["sets"], {"nargs": "*", "help": "art sets (default: all)"}))
     add("preview", cmd_preview, "a still of a set's layers, composited", one, (["set"], {}), (["layers"], {"nargs": "*"}), (["-o", "--out"], {}))
     add("figures", cmd_figures, "a reference sheet of every figure pose and hat")
-    add("scene", cmd_scene, "render scenes and pull check frames", one, (["scenes"], {"nargs": "+"}), jobs, workers, force)
+    add("scene", cmd_scene, "render scenes and pull check frames", one, (["scenes"], {"nargs": "+"}), jobs, workers, force,
+        (["--at"], {"action": "append", "help": "pull a frame at this time or cue instead, e.g. --at 3.2 --at cue:wolf"}))
     add("render", cmd_render, "render scenes (only what changed)", part, scenes, jobs, workers, force)
     add("mix", cmd_mix, "voice-first mix, with a per-line audit", part)
     add("assemble", cmd_assemble, "join scenes and mix into a chapter master", part, (["--preview"], {"action": "store_true"}))

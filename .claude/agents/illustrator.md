@@ -23,10 +23,12 @@ Run `./movie` from the repo root. If more than one project exists, name yours fi
   white is bare paper. The engraver turns it into parallel hatching that swells in the darks, cross-hatches past mid-tone
   and closes up to solid ink in deep shadow. Give shapes real tonal design: a light source, a lit side and a shadow side
   (use linear or radial gradients inside shapes), and strong value contrast between figure and ground. Flat mid-grey
-  everywhere looks like a screen door. Avoid it.
+  everywhere looks like a screen door. Avoid it. **`gray(t)` takes ink, not brightness:** `gray(0)` is bare paper and `gray(1)`
+  is solid ink, so a pale sky is `gray(0.15)`.
 - **Hatch direction follows form** via `data-h="<angle>[,<pitch>[,<style>]]"` on shapes or groups (inherited): skies and
   water horizontal (0), walls and planks vertical (90), slopes and ground at their angle, cylinders along their length.
-  Styles: `lines` (default), `cross` (always cross-hatched), `solid` (crisp ink, for silhouettes, rails, thin parts),
+  Styles: `lines` (default), `cross` (always cross-hatched), `solid` (crisp ink, for silhouettes, rails, thin parts; it is black or nothing whatever
+  the grey, so use hatching for pale lines),
   `paper` (no lines: lights, highlights, lit windows, lettering on dark grounds), and `data-h="skip"` for a soft glow or
   shade drawn over other shapes (it changes tone, not hatch direction). Pitch multiplier 0.6 to 1.2 (finer for small objects).
 - **Colour is a hand-tint wash under the lines**, used sparingly: any saturated fill tints the paper beneath the hatching.
@@ -36,7 +38,8 @@ Run `./movie` from the repo root. If more than one project exists, name yours fi
   detail. You may write your own pose dicts (same keys as `POSES`) in your build.py. Animals and objects are yours to draw
   with `smooth()` and `poly()`.
 - **Engraved strokes for soft things:** `puff()` for smoke, steam, clouds and dust (concentric tapered arcs), `taper_line()`
-  and `taper_arc()` for grass, hair, folds, cracks, ripples and motion marks.
+  and `taper_arc()` for grass, hair, folds, cracks, ripples and motion marks (they swell in the middle), `limb()` for
+  branches, legs, necks and tails (it narrows from one end to the other).
 - **Depth is layers.** Split each set into 4 to 8 layers, back to front (sky, far, mid, props, figures, foreground). Near
   layers move more under the camera, which sells the diorama.
 - Draw the `period` in `movie.json`. No anachronisms, and no brand names except those in the narration.
@@ -59,8 +62,16 @@ s.sprite("lantern", body, 120, 200)   # a small piece on its own sheet, placed w
 s.done()                              # engraves what changed; layers land in film/assets/art/chNN/<set>/
 ```
 
-Run it with `./movie art NN <set>`. See a still with `./movie preview NN <set> sky far mid figures fg`, then look at it with
-the Read tool. Look critically and fix what does not read. **Budget two look-and-fix rounds per set**, plus one render check
+The helpers, all from `svgkit`: `lin(id, [(offset, colour), ...], x1=0, y1=0, x2=0, y2=1)` and `rad(id, [(offset, colour, opacity), ...],
+cx, cy, r)` make gradients for `defs`. `smooth(pts, closed=True, t=0.5)`, `poly(pts, closed=True)`, `taper_line(pts, w)`, `limb(pts, w0, w1)` and
+`taper_arc(cx, cy, r, a0, a1, w)` return a path's `d`. `ridge(x0, x1, base, amp, seed)` returns a hill line's points. `puff(cx, cy, r, light=-135,
+arcs=6, w=2.4, outline=1.6, fill=..., disk_h="paper")` returns finished SVG. Layers also take `shadow=` (0 to 1) and `pitch=`.
+
+A character or prop in several sets: put its drawing in `art/chNN/shared.py`, and at the top of each build.py add
+`sys.path.insert(0, str(Path(__file__).parent.parent))`, then import it.
+
+Run it with `./movie art NN <set>`. See a still of the stage with `./movie preview NN <set> sky far mid figures fg` (layers from
+another set are `../grove/sky`; put `-o out.png` last), then look at it with the Read tool. Look critically and fix what does not read. **Budget two look-and-fix rounds per set**, plus one render check
 per scene; spend extra only on the part's hero shot. Do not redraw what already reads.
 
 To reuse another set's picture, give a `src` beginning `../../assets/art/ch01/<set>/...` and draw only what changes as new
@@ -78,8 +89,10 @@ For each of your scenes write `story/specs/chNN/<sid>.json`. The format is docum
   actions on the words that name them**: "the people came running" means the crowd moves at `cue:running`. Cues follow the
   voice automatically if a line is re-voiced; plain seconds do not. The camera should always drift a little (a slow push,
   pan or crane), never fully static.
-- Camera limits: full layers overhang by 96 px and 54 px, and a layer at depth z moves by camera*z. Keep |camera.x|*z <= 90
-  and |camera.y|*z <= 50 at zoom 1; zoom above 1 adds room ((zoom-1)*960 px). Check the corners.
+- Camera: a point at stage x on a layer at depth z lands at `960 + s*(x - 960) - camera.x*z`, where `s = 1 + (zoom - 1)*(0.35 + 0.65*z)`
+  (and the same for y about 540). So positive camera.x moves the world left, and zoom magnifies near layers more than far ones.
+  Full layers overhang by 96 px and 54 px: keep |camera.x|*z <= 90 and |camera.y|*z <= 50 at zoom 1, and check the corners.
+- `origin` is in layer px. For a full layer that is stage x + 96, y + 54.
 - fx: `glow` (lamps, windows, the moon; `flicker` for flames), `beam` (light shafts, a polygon), `dust` (motes in a beam),
   `sparkle` (a glint at a cue), `fade` and `tint` (full-frame colour keys). fx draw above every layer unless you give them
   `"under": "<layer name>"` (name your layers): then they sit just beneath that layer, so a window glow can go behind a figure.
@@ -91,8 +104,10 @@ For each of your scenes write `story/specs/chNN/<sid>.json`. The format is docum
   cue), `label` (a small caption), `words` (a kinetic line landing word by word). Use text sparingly: pictures carry the story.
 - Scenes join by dissolves of about 0.8 s, so keep key action out of the first and last second.
 
-Render and check each scene: `./movie scene NN <sid>` prints three frames. Look at them. A 20 s scene renders in about 30 s.
-Fix gaps at frame edges, layers popping, unreadable figures and text overflow. If you change a drawing, re-run `./movie art`
+Render and check each scene: `./movie scene NN <sid>` prints three frames, and `--at cue:word` pulls one at a moment you care
+about. Look at them. A 20 s scene renders in about 30 s.
+Fix gaps at frame edges, layers popping, unreadable figures and text overflow. `./movie check NN` catches
+bad cues in your specs before you render. If you change a drawing, re-run `./movie art`
 first; renders only repeat when something changed.
 
 ## Rules

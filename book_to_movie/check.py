@@ -1,6 +1,7 @@
 """Check a chapter's script before anything is spent on it. Every rule here exists because breaking it wasted a render or
 a voice take on the film this repo was built for."""
 import difflib
+import json
 import re
 
 from .project import norm, parse_cue
@@ -90,8 +91,41 @@ def check_chapter(p, ch):
             if count < nth:
                 errors.append(f"SFX[{it['name']}]: cue {at!r} but {sid} says that word {count} time(s)")
 
+    # scene specs that exist so far: their cues must be words the narration really says
+    for path in sorted(p.specs(ch).glob("s*.json")):
+        sid = path.stem
+        if sid not in text_of:
+            warnings.append(f"{path.name}: the script has no scene called {sid}")
+            continue
+        try:
+            spec = json.loads(path.read_text())
+        except ValueError as e:
+            errors.append(f"{path.name}: not valid JSON: {e}")
+            continue
+        spoken = [norm(w) for w in text_of[sid].split()]
+        for cue in sorted(set(_cues_in(spec))):
+            try:
+                word, nth, _ = parse_cue(cue)
+            except ValueError as e:
+                errors.append(f"{path.name}: {e}")
+                continue
+            if spoken.count(word) < nth:
+                errors.append(f"{path.name}: {cue!r}, but {sid} says that word {spoken.count(word)} time(s)")
+
     summary = {"scenes": len(scenes), "words": words, "minutes": round(words / SPOKEN_WPM, 1), "sets": len(sets), "cards": len(cards)}
     return errors, warnings, summary
+
+
+def _cues_in(value):
+    if isinstance(value, str):
+        if value.startswith("cue:"):
+            yield value
+    elif isinstance(value, dict):
+        for v in value.values():
+            yield from _cues_in(v)
+    elif isinstance(value, list):
+        for v in value:
+            yield from _cues_in(v)
 
 
 def _coverage(shown, spoken):

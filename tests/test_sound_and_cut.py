@@ -165,3 +165,29 @@ def test_status_says_what_to_do_next(voiced):
     s = chapter_state(voiced, "ch01")
     assert s["voice"] == 3 and s["specs"] == 0 and s["clips"] == 0
     assert "specs missing" in next_step(s, "ch01")
+
+
+def test_qa_reads_the_loudness_summary():
+    from book_to_movie.qa import parse_loudness
+    log = """[Parsed_ebur128_0 @ 0x1] t: 1.0 TARGET:-23 LUFS M: -20.0 S:-120.7 I: -20.0 LUFS LRA: 0.0 LU FTPK: -3.0 dBFS TPK: -3.0 dBFS
+[Parsed_ebur128_0 @ 0x1] Summary:
+
+  Integrated loudness:
+    I:         -16.0 LUFS
+    Threshold: -26.1 LUFS
+
+  Loudness range:
+    LRA:         5.2 LU
+
+  True peak:
+    Peak:       -1.0 dBFS
+"""
+    assert parse_loudness(log) == "-16.0 LUFS, peak -1.0 dBFS"
+    assert "-inf" in parse_loudness("Summary:\n I: -70.0 LUFS\n Peak: -inf dBFS\n")
+
+
+def test_qa_names_ignore_case_and_only_flag_what_was_not_heard():
+    from book_to_movie.qa import unheard_names
+    scenes = [("s01", "x", "What a noble bird. The Queen of the Birds met Gunsaulus.")]
+    words = [{"word": w} for w in " what a noble bird the queen of the birds met gonzales".split()]
+    assert unheard_names(scenes, words) == ["Gunsaulus"]

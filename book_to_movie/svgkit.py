@@ -103,6 +103,26 @@ def taper_line(pts, w, ends=0.6):
     return poly(L + R[::-1])
 
 
+def limb(pts, w0, w1=0.0):
+    """a stroke along a polyline that narrows steadily from width w0 to w1: branches, legs, necks, tails.
+    (taper_line swells in the middle instead.)"""
+    if len(pts) == 2:
+        (x0, y0), (x1, y1) = pts
+        pts = [(x0 + (x1 - x0) * k / 6, y0 + (y1 - y0) * k / 6) for k in range(7)]
+    n = len(pts)
+    L, R = [], []
+    for k, (x, y) in enumerate(pts):
+        x0, y0 = pts[max(0, k - 1)]
+        x1, y1 = pts[min(n - 1, k + 1)]
+        dx, dy = x1 - x0, y1 - y0
+        d = math.hypot(dx, dy) or 1.0
+        nx, ny = -dy / d, dx / d
+        hw = 0.5 * (w0 + (w1 - w0) * k / (n - 1))
+        L.append((x + nx * hw, y + ny * hw))
+        R.append((x - nx * hw, y - ny * hw))
+    return smooth(L + R[::-1], closed=True, t=0.35)
+
+
 def puff(cx, cy, r, light=-135.0, arcs=6, ink="#050505", fill="#f4ecd8", w=2.4, outline=1.6, disk_h="paper"):
     """an engraved billow: a disk shaded by concentric tapered arcs on the side away from the light"""
     shade = light + 180

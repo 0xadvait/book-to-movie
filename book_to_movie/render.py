@@ -19,21 +19,35 @@ def npx_path():
     return npx
 
 
+ASSET_RX = r"""(?:src="|url\(')(\.\./\.\./assets/[^"']+)"""
+
+
+def composition_assets(html_path):
+    """every image and font a composition points at -> [(path as written, file on disk)]"""
+    html_path = Path(html_path)
+    srcs = sorted(set(re.findall(ASSET_RX, html_path.read_text())))
+    return [(src, (html_path.parent / src).resolve()) for src in srcs]
+
+
 def composition_hash(html_path):
     """the composition's text plus the size and age of every image it uses"""
-    text = Path(html_path).read_text()
-    h = hashlib.sha1(text.encode())
-    for src in sorted(set(re.findall(r'''(?:src="|url\(')(\.\./\.\./assets/[^"']+)''', text))):
-        f = (Path(html_path).parent / src).resolve()
+    h = hashlib.sha1(Path(html_path).read_text().encode())
+    for src, f in composition_assets(html_path):
         h.update(f"{src}:{f.stat().st_size}:{f.stat().st_mtime_ns}".encode() if f.exists() else f"{src}:missing".encode())
     return h.hexdigest()
 
 
 def render_one(p, ch, sid, workers=2, force=False):
+    spec = p.specs(ch) / f"{sid}.json"
+    if not spec.exists():
+        return sid, "no spec"
     try:
         html = scene_html.build(p, ch, sid)
-    except FileNotFoundError:
-        return sid, "no spec"
+    except (ValueError, OSError, KeyError) as e:
+        return sid, f"FAILED {spec.name}: {e}"
+    missing = [src.removeprefix("../../assets/") for src, f in composition_assets(html) if not f.exists()]
+    if missing:      # the renderer would quietly draw nothing where the layer should be
+        return sid, f"FAILED {spec.name}: no such image {missing[:4]}. Check the layer's src, or run ./movie art {ch}."
     out = p.renders_dir(ch) / f"{sid}.mp4"
     stamp = out.with_suffix(".hash")
     key = composition_hash(html)
@@ -49,6 +63,8 @@ def render_one(p, ch, sid, workers=2, force=False):
         with open(log, "w") as f:
             subprocess.run(cmd, cwd=p.film, stdout=f, stderr=subprocess.STDOUT)
         if out.exists():
+            if "media_load_failed" in log.read_text(errors="replace"):
+                return sid, f"FAILED an image would not load (log: {log})"
             stamp.write_text(key)
             return sid, "rendered"
     return sid, f"FAILED (log: {log})\n{tail(log, 12)}"

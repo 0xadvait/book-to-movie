@@ -170,7 +170,9 @@ def mix_chapter(p, ch, audit=True):
         for sid, a, b in lines:
             i0, i1 = int(a * SR), int(b * SR)
             lv, lm, lsx = lufs(voice[i0:i1]), lufs(music[i0:i1]), lufs(sfx[i0:i1])
-            print(f"  {sid:24s} {lv:6.1f} {lm:6.1f} {lv - lm:6.1f} {lsx:6.1f} {lv - lsx:6.1f}")
+            def cell(v, level):     # nothing playing under this line: say so rather than print a meaningless number
+                return f"{v:6.1f}" if level > -69 else "     -"
+            print(f"  {sid:24s} {lv:6.1f} {cell(lm, lm)} {cell(lv - lm, lm)} {cell(lsx, lsx)} {cell(lv - lsx, lsx)}")
 
     # ---- master: -16 LUFS integrated, then a gentle peak ceiling at -1 dBFS ----
     level = lufs(final)

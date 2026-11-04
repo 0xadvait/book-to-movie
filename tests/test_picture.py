@@ -82,6 +82,35 @@ def test_composition_hash_notices_a_changed_image(voiced, tmp_path):
     assert render.composition_hash(html) != first
 
 
+def test_a_missing_image_fails_the_render_and_names_itself(voiced, monkeypatch):
+    """the renderer would quietly draw nothing, and the film would just be missing a character"""
+    timing_chapter(voiced, "ch01")
+    spec(voiced, layers=[{"name": "crow", "src": "corw.png", "z": 0.5}])
+    monkeypatch.setattr(render.subprocess, "run", lambda *a, **k: pytest.fail("rendered anyway"))
+    sid, status = render.render_one(voiced, "ch01", "s02-harbour")
+    assert status.startswith("FAILED") and "corw.png" in status and "s02-harbour.json" in status
+
+
+def test_a_bad_cue_fails_the_render_and_names_its_spec(voiced, monkeypatch):
+    timing_chapter(voiced, "ch01")
+    spec(voiced, text=[{"type": "label", "text": "x", "at": "cue:thunder"}])
+    monkeypatch.setattr(render.subprocess, "run", lambda *a, **k: pytest.fail("rendered anyway"))
+    sid, status = render.render_one(voiced, "ch01", "s02-harbour")
+    assert status.startswith("FAILED s02-harbour.json") and "thunder" in status
+
+
+def test_a_scene_with_no_spec_is_only_a_placeholder(voiced):
+    timing_chapter(voiced, "ch01")
+    assert render.render_one(voiced, "ch01", "s02-harbour")[1] == "no spec"
+
+
+def test_limb_narrows_from_one_end_to_the_other():
+    d = svgkit.limb([(0, 0), (100, 0)], 20, 2)
+    assert d.startswith("M") and d.endswith("Z")
+    numbers = [float(x) for x in re.findall(r"-?\d+\.\d+", d)]
+    assert max(numbers) >= 9.5
+
+
 def test_titles_fit_the_ribbon():
     assert cards.fit_size("SHORT", 112) == 112
     assert cards.fit_size("A TITLE OF SOME LENGTH", 112) < 112
@@ -210,3 +239,19 @@ SETS = {}
     # the numerals follow the chapter, and the very last close card needs no "next"
     assert (voiced.art_assets("ch01", "cards") / "corners_I.svg").exists()
     assert len(json.loads((voiced.specs("ch01") / "s08-e.json").read_text())["text"]) == 1
+
+
+@needs_rsvg
+def test_preview_shows_the_stage_not_the_whole_sheet(project):
+    from book_to_movie.previews import preview_set
+    folder = project.art_dir("ch01", "harbour")
+    folder.mkdir(parents=True)
+    build = folder / "build.py"
+    build.write_text("# stands in for a drawing script\n")
+    s = Set(build, workers=1)
+    s.layer("sky", '<rect x="-100" y="-60" width="2120" height="1200" fill="#ffffff" data-h="paper"/><rect x="-100" y="-60" width="90" height="1200" fill="#000000" data-h="solid"/>')
+    s.done()
+    out = preview_set(project, "ch01", "harbour")
+    im = np.asarray(Image.open(out).convert("L"), np.float32)
+    assert im.shape == (1080, 1920)
+    assert im[:, :20].mean() > 120, "the overhang, off stage, should not be in the preview"

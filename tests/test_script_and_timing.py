@@ -148,3 +148,19 @@ def test_user_settings_merge_over_defaults(tmp_path):
 
 def test_music_is_off_unless_asked_for(project):
     assert project.cfg["music"] is False
+
+
+def test_cues_in_scene_specs_must_be_spoken(voiced):
+    spec = {"id": "s02-harbour", "set": "harbour", "layers": [{"src": "a.png", "frames": {"keys": [["cue:thunder", 1]]}}], "text": [{"at": "cue:water#2"}]}
+    (voiced.specs("ch01") / "s02-harbour.json").write_text(json.dumps(spec))
+    errors = check_chapter(voiced, "ch01")[0]
+    assert any("s02-harbour.json" in e and "thunder" in e for e in errors)
+    assert any("s02-harbour.json" in e and "water#2" in e for e in errors)
+    spec = {"id": "s02-harbour", "set": "harbour", "layers": [{"src": "a.png", "move": [{"t": "cue:water"}, {"t": "cue:fifty-cent+0.5"}]}]}
+    (voiced.specs("ch01") / "s02-harbour.json").write_text(json.dumps(spec))
+    assert check_chapter(voiced, "ch01")[0] == []
+
+
+def test_broken_scene_spec_is_reported_not_a_crash(voiced):
+    (voiced.specs("ch01") / "s02-harbour.json").write_text("{not json")
+    assert any("not valid JSON" in e for e in check_chapter(voiced, "ch01")[0])

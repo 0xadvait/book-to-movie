@@ -45,9 +45,11 @@ def preview_set(p, ch, set_name, names=None, out=None, size=1920):
     missing = [str(x) for x in paths if not x.exists()]
     if missing:
         raise SystemExit(f"missing layers: {missing}")
-    im = Image.fromarray((_finish(_composite([_load(x) for x in paths])) * 255 + 0.5).astype(np.uint8))
-    if im.width != size:
-        im = im.resize((size, int(im.height * size / im.width)), Image.LANCZOS)
+    sheet = _composite([_load(x) for x in paths])
+    h, w = sheet.shape[:2]
+    x0, y0 = round(w * 96 / 2112), round(h * 54 / 1188)       # the overhang is for the camera: show what the stage shows
+    im = Image.fromarray((_finish(sheet[y0:h - y0, x0:w - x0]) * 255 + 0.5).astype(np.uint8))
+    im = im.resize((size, size * 9 // 16), Image.LANCZOS)
     out = Path(out) if out else p.qa() / f"{ch}_{set_name}.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     im.save(out)
