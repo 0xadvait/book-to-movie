@@ -4,6 +4,8 @@
 
 # Book to Movie
 
+[![CI](https://github.com/0xadvait/book-to-movie/actions/workflows/ci.yml/badge.svg)](https://github.com/0xadvait/book-to-movie/actions/workflows/ci.yml)
+
 Turn any book into an illustrated, narrated film. Claude writes the script and draws every frame in code.
 
 Video models can make you a gorgeous eight seconds. They can't make you two hours. The characters drift, the look wanders, the bill climbs, and changing one line means starting again.
@@ -240,7 +242,7 @@ The demo costs nothing. Keeping sets few and returning to places, which the brie
 
 - **It's a narrated picture book that moves, not a live-action movie.** One narrator, silhouettes, no lip sync. That's the point of the look, and also its ceiling.
 - **It needs your eye.** The approval gates aren't decoration. Claude will happily ship a pilot that's too slow.
-- **It's been run end to end on macOS on Apple Silicon.** [CI](.github/workflows/ci.yml) runs the tests and makes the demo film on Ubuntu on every push. Windows isn't supported.
+- **It runs on macOS on Apple Silicon and on Linux.** [CI](.github/workflows/ci.yml) makes the demo film on Ubuntu on every push. Windows isn't supported.
 - **English is the only language tested end to end.** Whisper and the voices handle many more, but the shipped fonts cover Latin script only, and word timing assumes spaces between words.
 - **A scanned PDF needs OCR first**, and chapter detection will sometimes need a hint (`--heading 'REGEX'`).
 - **The free voices sound like computers.** Good for a pilot, not for a premiere. Audio you generate is subject to your provider's terms: check that your plan allows what you intend to do with it.
